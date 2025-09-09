@@ -37,8 +37,9 @@ fun SplashScreen(onStartClick: () -> Unit = {}) {
             painter = painterResource(id = R.drawable.intro_pic),
             contentDescription = null,
             modifier = Modifier
+                .fillMaxSize()
                 .align(Alignment.TopCenter),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.Crop
         )
         Button(
             onClick = onStartClick,
