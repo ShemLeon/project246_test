@@ -40,7 +40,6 @@ fun SplashScreen(onStartClick: () -> Unit = {}) {
                 .align(Alignment.TopCenter),
             contentScale = ContentScale.Fit
         )
-
         Button(
             onClick = onStartClick,
             modifier = Modifier
@@ -57,7 +56,6 @@ fun SplashScreen(onStartClick: () -> Unit = {}) {
                 fontSize = 20.sp,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
-
             )
         }
     }
