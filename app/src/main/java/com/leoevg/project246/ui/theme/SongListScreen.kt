@@ -28,6 +28,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.leoevg.project246.R
 import com.leoevg.project246.data.Song
+import com.leoevg.project246.data.getSongs
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -37,6 +38,7 @@ fun SongListScreen(
     val context = LocalContext.current
     val songsState = remember { mutableStateOf<List<Song>>(emptyList()) }
 
+    // учет разрешения для старых и новых версий андроида
     val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         Manifest.permission.READ_MEDIA_AUDIO
     } else {
@@ -46,7 +48,7 @@ fun SongListScreen(
 
     LaunchedEffect(permissionState.status) {
         if (permissionState.status.isGranted) {
-            //       songsState.value = getSongs(context)
+            songsState.value = getSongs(context)
         }
     }
 
@@ -71,15 +73,21 @@ fun SongListScreen(
 
             if (!permissionState.status.isGranted) {
                 Button(
-                    onClick = { permissionState.launchPermissionRequest() },
+                    onClick = {  permissionState.launchPermissionRequest() },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    Text("permission To Musics")
+                    Text("Permission To Musics")
                 }
             }
 
+            SongList(
+                songs = songsState.value,
+                onSongClick = { pos ->
+                    onSongClick(songsState.value, pos)
+                },
+                modifier = Modifier.weight(1f)
+            )
         }
+
     }
-
-
 }
