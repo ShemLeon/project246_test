@@ -29,41 +29,41 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.leoevg.project246.R
 import com.leoevg.project246.data.Song
+import androidx.core.net.toUri
 
 @Composable
 fun SongList(
     songs: List<Song>,
-    onSongClick: (Int)->Unit,
+    onSongClick: (Int) -> Unit,
     modifier: Modifier
-){
+) {
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
-        itemsIndexed(songs){
-            index,song->
+        itemsIndexed(songs) { index, song ->
             SongListItem(
                 song = song,
-                onClick = {onSongClick}
+                onClick = { onSongClick(index) }
             )
         }
     }
 }
 
 @Composable
-fun SongListItem(song: Song, onClick: () -> Unit){
+fun SongListItem(song: Song, onClick: () -> Unit) {
     val albumArtUri = ContentUris.withAppendedId(
-        Uri.parse("content://media/external/audio/albumart"),
+        "content://media/external/audio/albumart".toUri(),
         song.albumId
     )
 
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .clickable{onClick()}
-        .padding(8.dp)
-        .height(72.dp)
-        ,
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(8.dp)
+            .height(72.dp),
         verticalAlignment = Alignment.CenterVertically
-        ) {
+    ) {
         AsyncImage(
             model = albumArtUri,
             contentDescription = null,
@@ -75,8 +75,9 @@ fun SongListItem(song: Song, onClick: () -> Unit){
             error = painterResource(id = R.drawable.baseline_music_note_24),
             placeholder = painterResource(id = R.drawable.baseline_music_note_24)
         )
-        Column(modifier = Modifier.padding(start = 12.dp)){
-            Text(song.title.orEmpty(),
+        Column(modifier = Modifier.padding(start = 12.dp)) {
+            Text(
+                song.title.orEmpty(),
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,

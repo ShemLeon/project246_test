@@ -1,5 +1,7 @@
 package com.leoevg.project246.ui.theme
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import android.Manifest
 import android.os.Build
 import androidx.compose.foundation.Image
@@ -48,7 +50,9 @@ fun SongListScreen(
 
     LaunchedEffect(permissionState.status) {
         if (permissionState.status.isGranted) {
-            songsState.value = getSongs(context)
+            withContext(Dispatchers.IO) {
+                songsState.value = getSongs(context)
+            }
         }
     }
 
@@ -78,6 +82,14 @@ fun SongListScreen(
                 ) {
                     Text("Permission To Musics")
                 }
+            }else { // Добавьте этот блок else
+                SongList(
+                    songs = songsState.value,
+                    onSongClick = { pos ->
+                        onSongClick(songsState.value, pos)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
             }
 
             SongList(
