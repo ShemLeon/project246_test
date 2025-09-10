@@ -42,13 +42,14 @@ fun SongListScreen(
     } else {
         Manifest.permission.READ_EXTERNAL_STORAGE
     }
-    val permissionState = rememberPermissionState(permission) {
-        LaunchedEffect(permissionState.status) {
-            if (permission.status.isGranted) {
-                //       songsState.value = getSongs(context)
-            }
+    val permissionState = rememberPermissionState(permission)
+
+    LaunchedEffect(permissionState.status) {
+        if (permissionState.status.isGranted) {
+            //       songsState.value = getSongs(context)
         }
     }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -68,9 +69,9 @@ fun SongListScreen(
                     .align(Alignment.CenterHorizontally)
             )
 
-            if (!permissionState.status.isGranted){
+            if (!permissionState.status.isGranted) {
                 Button(
-                    onClick = {permissionState.launchPermissionRequest()},
+                    onClick = { permissionState.launchPermissionRequest() },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
                     Text("permission To Musics")
