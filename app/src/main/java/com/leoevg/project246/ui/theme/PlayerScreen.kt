@@ -43,19 +43,19 @@ fun PlayerScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }                 // ядро плеера
 
-    val currentIndex by rememberSaveable { mutableStateOf(initialIndex) }
+    val currentIndex by rememberSaveable { mutableStateOf(initialIndex) }   // какая песня из songList сейчас активна.
     var isShuffle by rememberSaveable { mutableStateOf(false) }
-    var currentIndex by rememberSaveable { mutableStateOf(false) }
     var isRepeat by rememberSaveable { mutableStateOf(false) }
     var isPlaying by rememberSaveable { mutableStateOf(false) }
-    var elapsed by rememberSaveable { mutableStateOf(0L) }
+    var elapsed by rememberSaveable { mutableStateOf(0L) }                  // отслеживание текущего прогресса
+    var duration by rememberSaveable { mutableStateOf(0L) }
     var shuffledList by rememberSaveable { mutableStateOf(songList) }
     val waveform = remember { get }
-    var waveformProgress by remember { mutableStateOf(0f) }
+    var waveformProgress by remember { mutableStateOf(0f) }                 // для управления визуализатором аудио волны.
 
-
+    // Это основная логика для воспроизведения песни.
     LaunchedEffect(currentIndex, isShuffle) {
         val list = if (isShuffle) shuffledList.shuffled() else songList
         val song = list.getOrNull(currentIndex) ?: return@LaunchedEffect
@@ -64,6 +64,7 @@ fun PlayerScreen(
         exoPlayer.playWhenReady = true
     }
 
+    // для управления жизненным циклом плеера и реакции на его события.
     DisposableEffect(exoPlayer) {
         val listener = object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -72,21 +73,21 @@ fun PlayerScreen(
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_READY) {
-                    duration = exoPlayer.duration
+                    duration = exoPlayer.duration           //   общей длительности песни (для ползунка перемотки
                 }
                 if (playbackState == Player.STATE_ENDED) {
                     currentIndex = (currentIndex + 1) % (if (isShuffle) shuffledList.size
                     else songList.size)
                 }
             }
-
         }
         exoPlayer.addListener(listener)
-        OnDispose {
+        onDispose {
             exoPlayer.release()
         }
     }
 
+    // Обновление индикатора прогресса
     LaunchedEffect(isPlaying) {
         while (isPlaying) {
             elapsed = exoPlayer.currentPosition
@@ -119,7 +120,9 @@ fun PlayerScreen(
                     .data(albumUri)
                     .build(),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize().blur(18.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .blur(18.dp),
                 contentScale = ContentScale.Crop,
                 alpha = 0.4f,
                 error = painterResource(id = R.drawable.baseline_music_note_24),
