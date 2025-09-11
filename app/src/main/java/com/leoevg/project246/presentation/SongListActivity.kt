@@ -1,5 +1,6 @@
 package com.leoevg.project246.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,7 +13,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SongListScreen { songs, position ->
-
+                val intent = Intent(this, PlayerActivity::class.java)
+                intent.putParcelableArrayListExtra("songList", ArrayList(songs))
+                intent.putExtra(
+                    "position", position
+                )
+                startActivity(intent)
             }
         }
     }
