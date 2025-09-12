@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,6 +14,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -82,7 +85,8 @@ fun PlayerScreen(
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_READY) {
-                    duration = exoPlayer.duration           //   общая длительность песни (для ползунка перемотки
+                    duration =
+                        exoPlayer.duration           //   общая длительность песни (для ползунка перемотки
                 }
                 if (playbackState == Player.STATE_ENDED) {
                     currentIndex = (currentIndex + 1) % (if (isShuffle) shuffledList.size
@@ -141,12 +145,23 @@ fun PlayerScreen(
             Row(Modifier.padding(horizontal = 16.dp, vertical = 48.dp)) {
                 IconButton(
                     onBack,
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
                         .background(Color(0x30ffffff), shape = CircleShape)
                 ) {
                     Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                 }
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    onClick = {},
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(Color(0x30ffffff), shape = CircleShape)
+                ) {
+                    Icon(Icons.Default.FavoriteBorder, null, tint = Color.White)
 
+
+                }
             }
 
 
