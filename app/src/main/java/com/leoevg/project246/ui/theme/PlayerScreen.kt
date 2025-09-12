@@ -5,7 +5,16 @@ import android.content.ContentUris
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -45,14 +54,14 @@ fun PlayerScreen(
     val context = LocalContext.current
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }                 // ядро плеера
 
-    val currentIndex by rememberSaveable { mutableStateOf(initialIndex) }   // какая песня из songList сейчас активна.
+    var currentIndex by rememberSaveable { mutableStateOf(initialIndex) }   // какая песня из songList сейчас активна.
     var isShuffle by rememberSaveable { mutableStateOf(false) }
     var isRepeat by rememberSaveable { mutableStateOf(false) }
     var isPlaying by rememberSaveable { mutableStateOf(false) }
     var elapsed by rememberSaveable { mutableStateOf(0L) }                  // отслеживание текущего прогресса
     var duration by rememberSaveable { mutableStateOf(0L) }
     var shuffledList by rememberSaveable { mutableStateOf(songList) }
-    val waveform = remember { get }
+    val waveform = remember { getWaveForm() }
     var waveformProgress by remember { mutableStateOf(0f) }                 // для управления визуализатором аудио волны.
 
     // Это основная логика для воспроизведения песни.
@@ -67,13 +76,13 @@ fun PlayerScreen(
     // для управления жизненным циклом плеера и реакции на его события.
     DisposableEffect(exoPlayer) {
         val listener = object : Player.Listener {
-            override fun onIsPlayingChanged(isPlaying: Boolean) {
+            override fun onIsPlayingChanged(isPlay: Boolean) {
                 isPlaying = isPlay
             }
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_READY) {
-                    duration = exoPlayer.duration           //   общей длительности песни (для ползунка перемотки
+                    duration = exoPlayer.duration           //   общая длительность песни (для ползунка перемотки
                 }
                 if (playbackState == Player.STATE_ENDED) {
                     currentIndex = (currentIndex + 1) % (if (isShuffle) shuffledList.size
@@ -129,6 +138,16 @@ fun PlayerScreen(
                 placeholder = painterResource((R.drawable.baseline_music_note_24))
 
             )
+            Row(Modifier.padding(horizontal = 16.dp, vertical = 48.dp)) {
+                IconButton(
+                    onBack,
+                    modifier = Modifier.size(48.dp)
+                        .background(Color(0x30ffffff), shape = CircleShape)
+                ) {
+                    Icon(Icons.Default.ArrowBack, null, tint = Color.White)
+                }
+
+            }
 
 
         }
