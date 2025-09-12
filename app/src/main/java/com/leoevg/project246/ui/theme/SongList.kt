@@ -86,8 +86,7 @@ fun SongListItem(song: Song, onClick: () -> Unit) {
             )
             Text(
                 song.artist.orEmpty(),
-                color = Color(0xffbbbbbb),
-                fontWeight = FontWeight.Bold,
+                color = Color.White,
                 fontSize = 14.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

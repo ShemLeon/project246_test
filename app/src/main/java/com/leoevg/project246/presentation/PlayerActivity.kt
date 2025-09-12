@@ -14,7 +14,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val mySongList = intent.getParcelableArrayListExtra("songList") ?: emptyList<Song>()
-        val initialIndex = intent.getIntExtra("initialIndex", 0)
+        val initialIndex = intent.getIntExtra("position", 0)
         setContent {
             PlayerScreen(
                 songList = mySongList,

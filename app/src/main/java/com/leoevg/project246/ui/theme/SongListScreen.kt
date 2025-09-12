@@ -92,13 +92,7 @@ fun SongListScreen(
                 )
             }
 
-            SongList(
-                songs = songsState.value,
-                onSongClick = { pos ->
-                    onSongClick(songsState.value, pos)
-                },
-                modifier = Modifier.weight(1f)
-            )
+
         }
 
     }
