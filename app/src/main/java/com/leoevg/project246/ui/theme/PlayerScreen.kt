@@ -224,16 +224,20 @@ fun PlayerScreen(
                 ) { percent ->
                     val seek = (percent * duration).toLong()
                     exoPlayer.seekTo(seek)
-                    elapsed=seek
+                    elapsed = seek
                     waveformProgress = percent
                 }
-                Row (
+                Row(
                     Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
-                ){
-
+                ) {
+                    Text(
+                        text = formatTime((duration / 1000).toInt()),
+                        color = Color.White,
+                        fontSize = 13.sp
+                    )
                 }
             }
 
@@ -324,3 +328,6 @@ fun getWaveForm(): IntArray {
     val random = Random(System.currentTimeMillis())
     return IntArray(50) { 5 + random.nextInt(50) }
 }
+
+fun formatTime(seconds: Int): String = String.format("%02d:%02d", seconds / 60, seconds % 60)
+
