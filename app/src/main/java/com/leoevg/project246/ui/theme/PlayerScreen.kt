@@ -214,6 +214,7 @@ fun PlayerScreen(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // repeat button
                 IconButton(onClick = {
                     isRepeat = !isRepeat
                     exoPlayer.repeatMode =
@@ -225,45 +226,56 @@ fun PlayerScreen(
                         tint = if (isRepeat) Color(0xff9c27b0) else Color.White
                     )
                 }
-                IconButton(onClick = {
 
+                // skip the previous button
+                IconButton(onClick = {
+                    val list = if (isShuffle) shuffledList else songList
+                    currentIndex = if (currentIndex - 1 < 0) list.size - 1 else currentIndex - 1
                 }) {
                     Icon(
                         painterResource(R.drawable.outline_skip_previous_24),
                         contentDescription = null,
-                        tint = if (isRepeat) Color(0xff9c27b0) else Color.White
+                        tint = Color.White
                     )
                 }
-                IconButton(onClick = {
 
+                //play-pause button
+                IconButton(onClick = {
+                    if (exoPlayer.isPlaying) exoPlayer.pause() else exoPlayer.play()
+                },
+                    modifier = Modifier
+                        .size(64.dp)
+                        .background(Color.White, shape = CircleShape)) {
+                    Icon(
+                        painterResource(if (isPlaying) R.drawable.baseline_pause_24 else R.drawable.baseline_play_arrow_24),
+                        contentDescription = null,
+                        tint = Color(0xff1a1a1a)
+                    )
+                }
+
+                // skip next Button
+                IconButton(onClick = {
+                    val list = if (isShuffle) shuffledList else songList
+                    currentIndex = (currentIndex + 1) % list.size
                 }) {
                     Icon(
-                        painterResource(R.drawable.outline_repeat_one_24),
+                        painterResource(R.drawable.outline_skip_next_24),
                         contentDescription = null,
                         tint = if (isRepeat) Color(0xff9c27b0) else Color.White
                     )
                 }
-                IconButton(onClick = {
 
+                // shuffle button
+                IconButton(onClick = {
+                    isShuffle = !isShuffle
+                    shuffledList = if (isShuffle) songList.shuffled() else songList
                 }) {
                     Icon(
-                        painterResource(R.drawable.outline_repeat_one_24),
+                        painterResource(R.drawable.outline_shuffle_24),
                         contentDescription = null,
-                        tint = if (isRepeat) Color(0xff9c27b0) else Color.White
+                        tint = Color.White
                     )
                 }
-                IconButton(onClick = {
-
-                }) {
-                    Icon(
-                        painterResource(R.drawable.outline_repeat_one_24),
-                        contentDescription = null,
-                        tint = if (isRepeat) Color(0xff9c27b0) else Color.White
-                    )
-                }
-
-
-
 
 
             }
