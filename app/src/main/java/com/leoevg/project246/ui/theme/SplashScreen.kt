@@ -61,7 +61,3 @@ fun SplashScreen(onStartClick: () -> Unit = {}) {
         }
     }
 }
-
-
-//  <style name="Theme.Project246" parent="Theme.AppCompat.DayNight.NoActionBar" />
-//  <style name="Theme.Project246" parent="android:Theme.Material.Light.NoActionBar" />
